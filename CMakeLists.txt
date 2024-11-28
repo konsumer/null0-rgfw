@@ -10,6 +10,11 @@ if(POLICY CMP0135)
   set(CMAKE_POLICY_DEFAULT_CMP0135 NEW)
 endif()
 
+if (POLICY CMP0077)
+  cmake_policy(SET CMP0077 NEW)
+  set(CMAKE_POLICY_DEFAULT_CMP0077 NEW)
+endif()
+
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/tools/cmake")
 
 # colors really help me (dyslexic)
@@ -22,9 +27,9 @@ if(CMAKE_VERSION VERSION_LESS "3.24.0")
   endif()
 endif()
 
-# if (NOT EMSCRIPTEN)
-#   add_subdirectory(cart/c)
-# endif()
+if (NOT EMSCRIPTEN)
+  add_subdirectory(cart/c)
+endif()
 
 if (NOT CARTS_ONLY)
   add_subdirectory(host)

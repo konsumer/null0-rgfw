@@ -1,4 +1,4 @@
-THis is an implementation of null0 API using [RGFW](https://github.com/ColleagueRiley/RGFW) and [miniaudio](https://github.com/mackron/miniaudio)
+This is an implementation of null0 API using [RGFW](https://github.com/ColleagueRiley/RGFW), [RSGL](https://github.com/ColleagueRiley/RSGL) and [miniaudio](https://github.com/mackron/miniaudio)
 
 ```
 # setup tools

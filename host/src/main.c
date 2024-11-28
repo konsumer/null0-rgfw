@@ -1,23 +1,56 @@
-#include "RGFW.h"
+#include "null0_host.h"
 
-void keyfunc(RGFW_window* win, u32 keycode, char keyName[16], u8 lockState, u8 pressed) {
-  printf("Key %u %u: %s\n", pressed, lockState, keyName);
-}
+RSGL_rect NULL0_SCREEN_RECT = (RSGL_rect){0, 0, 320, 240};
 
-int main() {
-  RGFW_window* win = RGFW_createWindow("null0", RGFW_RECT(0, 0, 320, 240), (u64)RGFW_CENTER);
-  RGFW_setKeyCallback(keyfunc);
-  i32 running = 1;
-  while (running) {
-    while (RGFW_window_checkEvent(win)) {
-      if (win->event.type == RGFW_quit || RGFW_isPressed(win, RGFW_Escape)) {
-        running = 0;
+int main(void) {
+  RGFW_window* win = RGFW_createWindow(
+    "null0",
+    NULL0_SCREEN_RECT,
+    RGFW_ALLOW_DND | RGFW_CENTER
+  );
+
+  RSGL_init(RGFW_AREA(win->r.w, win->r.h), RGFW_getProcAddress);
+
+  bool fill = true;
+
+  RSGL_point3D rotate = RSGL_POINT3D(0, 0, 0);
+
+  while (RGFW_window_shouldClose(win) == false) {
+    while (RSGL_checkEvent(win)) {
+      if (win->event.type == RGFW_quit) {
         break;
       }
     }
-    glClearColor(0xFF / 255.0f, 0XFF / 255.0f, 0xFF / 255.0f, 0xFF / 255.0f);
-    glClear(GL_COLOR_BUFFER_BIT);
+
+    rotate.z += 1;
+
+    if ((rand() % 200) <= 5) {
+      fill = !fill;
+    }
+
+    RSGL_fill(fill);
+
+    RSGL_rotate(rotate);
+    RSGL_drawPolygon(RSGL_RECT(20, 20, 50, 50), 8, RSGL_RGB(0, 255, 0));
+
+    RSGL_rotate(rotate);
+    RSGL_drawRect(RSGL_RECT(200, 200, 200, 200), RSGL_RGB(255, 0, 0));
+
+    RSGL_rotate(rotate);
+    RSGL_drawTriangle(
+      RSGL_TRIANGLE(
+        RSGL_POINT(0, 500), RSGL_POINT(200, 500), RSGL_POINT(100, 250)
+      ),
+      RSGL_RGB(0, 0, 255)
+    );
+
+    RSGL_clear(RSGL_RGB(65, 65, 65));
     RGFW_window_swapBuffers(win);
+
+    RGFW_window_checkFPS(win, 60);
   }
+
+  RSGL_free();
   RGFW_window_close(win);
+  return 0;
 }
